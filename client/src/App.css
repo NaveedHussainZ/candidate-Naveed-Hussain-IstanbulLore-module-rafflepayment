@@ -1,0 +1,148 @@
+/* General Layout */
+.page-container {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #fdfcfb, #e2d1c3);
+  color: #333;
+  padding: 0;
+  margin: 0;
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* full viewport height */
+  background-image: url('./assets/Istanbul.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  color: #fff;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.4); /* dark overlay for better text readability */
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.8rem;
+  font-weight: 300;
+  opacity: 0.95;
+  line-height: 1.4;
+}
+
+.story-card, .raffle-card{
+  margin: 1rem;
+}
+
+.raffle-status {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  color: #ffe4b5;
+}
+
+/* Content Feed */
+.main-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.story-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.story-card:hover {
+  transform: translateY(-5px);
+}
+
+.story-title {
+  font-size: 1.4rem;
+  color: #6c3483;
+}
+
+/* Raffle Sidebar */
+.raffle-card {
+  background: #fefefe;
+  border-left: 5px solid #6c3483;
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.primary-btn {
+  background-color: #6c3483;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.primary-btn:hover {
+  background-color: #884ea0;
+}
+
+.pulse {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(108, 52, 131, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(108, 52, 131, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(108, 52, 131, 0); }
+}
+
+/* Footer */
+.site-footer {
+  background: #1c1c1c;
+  color: #eee;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.footer-text {
+  margin-bottom: 1rem;
+}
+
+.footer-social a {
+  margin: 0 0.5rem;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-size: cover;
+}
+
+.icon-insta { background-image: url('/icons/instagram.svg'); }
+.icon-twitter { background-image: url('/icons/twitter.svg'); }
+.icon-fb { background-image: url('/icons/facebook.svg'); }
