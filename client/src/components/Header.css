@@ -9,6 +9,11 @@
     text-decoration: none;
 }
 
+#stories,
+#raffle {
+    scroll-margin-top: 80px;
+}
+
 .desktop-nav a:hover {
     text-decoration: underline;
 }

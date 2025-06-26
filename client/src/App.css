@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 /* General Layout */
 .page-container {
   font-family: 'Segoe UI', sans-serif;
