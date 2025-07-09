@@ -1,44 +1,96 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import Header from "./components/Header";
+import FloatingRaffleWidget from "./components/FloatingRaffleWidget";
+
+const mockAPI = {
+  getStatus: async () => ({ tickets: 1 }),
+  joinRaffle: async (currentTickets) => ({
+    success: true,
+    tickets: (currentTickets || 1) + 1,
+  }),
+  createCheckoutSession: async () => {
+    return {
+      sessionId: "test_session_123",
+      amount: 100,
+      currency: "usd",
+    };
+  },
+  simulateWebhook: async (userId) => {
+    return { success: true, tickets: 5 };
+  },
+};
 
 const App = () => {
   const [tickets, setTickets] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [paymentStatus, setPaymentStatus] = useState(null);
   const baseUrl =
     import.meta.env.VITE_VERCEL_API_BASE_URL ||
     "https://istanbullore-staging.onrender.com";
 
   const getStatus = async () => {
     try {
-      const res = await fetch(`${baseUrl}/api/raffle-status?userId=123`);
-      const data = await res.json();
+      setLoading(true);
+      const data = await mockAPI.getStatus();
       setTickets(data.tickets);
-      setLoading(false);
     } catch (err) {
       setTickets("error");
+    } finally {
       setLoading(false);
     }
   };
 
   const enterRaffle = async () => {
     try {
-      const res = await fetch(
-        "https://citycanvas-backendapi.onrender.com/api/raffle-entry",
-        {
-          method: "POST",
-        }
-      );
-      const data = await res.json();
-      if (data.success) {
-        setTickets(data.tickets);
-      } else {
-        setTickets("error");
-      }
+      setLoading(true);
+      const data = await mockAPI.joinRaffle(tickets);
+      setTickets(data.success ? data.tickets : "error");
     } catch (err) {
       setTickets("error");
+    } finally {
+      setLoading(false);
     }
   };
+
+  const handlePayment = async () => {
+    try {
+      setLoading(true);
+      setPaymentStatus("processing");
+
+      const { sessionId } = await mockAPI.createCheckoutSession();
+
+      window.location.href = `https://checkout.stripe.com/pay/${sessionId}`;
+
+      setTimeout(async () => {
+        try {
+          const webhookResponse = await mockAPI.simulateWebhook("123");
+          if (webhookResponse.success) {
+            setTickets(webhookResponse.tickets);
+            setPaymentStatus("success");
+          } else {
+            setPaymentStatus("failed");
+          }
+        } catch (err) {
+          setPaymentStatus("failed");
+        } finally {
+          setLoading(false);
+        }
+      }, 1500);
+    } catch (err) {
+      setPaymentStatus("failed");
+      setLoading(false);
+      alert("Payment failed. Please try again.");
+    }
+  };
+
+  useEffect(() => {
+    if (paymentStatus === "success") {
+      alert("Payment successful! Your tickets have been added.");
+    } else if (paymentStatus === "failed") {
+      alert("Payment failed. Please try again.");
+    }
+  }, [paymentStatus]);
 
   useEffect(() => {
     getStatus();
@@ -59,13 +111,6 @@ const App = () => {
           </h1>
           <p className="subtitle" lang="en">
             Discover the Untold Stories of a Timeless City
-          </p>
-          <p className="raffle-status" aria-live="polite" aria-atomic="true">
-            {loading
-              ? "Loading ticket status..."
-              : tickets === "error"
-              ? "❌ Error, try again."
-              : `✅ You have ${tickets} tickets`}
           </p>
         </div>
       </header>
@@ -155,6 +200,13 @@ const App = () => {
           </nav>
         </div>
       </footer>
+      <FloatingRaffleWidget
+        tickets={tickets}
+        loading={loading}
+        onJoinRaffle={enterRaffle}
+        onPayment={handlePayment}
+        paymentStatus={paymentStatus}
+      />
     </div>
   );
 };
