@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Payment Demo</title>
+    <style>
+      body {
+        font-family: Arial;
+        padding: 20px;
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: rgb(231, 231, 231);
+      }
+      .panel {
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: white;
+      }
+      button {
+        background: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .success {
+        color: green;
+      }
+      .error {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>IstanbulLore Payment Demo</h1>
+
+    <div class="panel">
+      <h3>Your Raffle Status</h3>
+      <p>Tickets: <span id="ticket-count">3</span></p>
+      <button onclick="mockPayment()">Proceed to Payment ($1)</button>
+      <div id="payment-status"></div>
+    </div>
+
+    <script>
+      function mockPayment() {
+        const statusEl = document.getElementById("payment-status");
+        statusEl.innerHTML = "<p>Processing payment...</p>";
+
+        // Simulate API call
+        setTimeout(() => {
+          document.getElementById("ticket-count").textContent = "5";
+          statusEl.innerHTML =
+            '<p class="success">✅ Payment successful! +2 tickets added.</p>';
+        }, 1500);
+      }
+    </script>
+  </body>
+</html>
